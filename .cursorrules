@@ -1,0 +1,28 @@
+# Rules for component creation
+
+- Component đặt trong `src/components/` dưới dạng **một file** tên PascalCase, ví dụ `HeroBanner.tsx`, `TopNav.tsx` (không bắt buộc thư mục con + `index.tsx` trừ khi component quá lớn và cần tách).
+- Export **default** component từ file đó.
+
+## Props
+
+- Kiểu props dùng **`interface IProps`** (tên cố định là `IProps`), không đặt tên kiểu khác cho props của component.
+
+## Thứ tự code trong component (từ trên xuống)
+
+1. **State** — `useState`, …
+2. **Hooks** — `useRouter`, custom hook (`useXxx`), …
+3. **Biến** — hằng cục bộ, giá trị suy ra, …
+4. **Hàm** — handler, `useCallback`, …
+5. **`useEffect`** — **đặt sát phần return UI** (ngay trước JSX), không nhét `useEffect` lên đầu sau state nếu effect chỉ phục vụ UI/lifecycle của màn đó.
+6. **Return** — JSX / UI.
+
+Nếu có early return (ví dụ `if (!data) return null`), có thể đặt sau bước hợp lý trong luồng đọc; ưu tiên giữ hooks không bị gọi sau điều kiện return (tuân React rules of hooks).
+
+# Styling (SCSS)
+
+- Style cho component dùng chung layout: tạo file SCSS trong **`src/styles/components/`** (component dùng nhiều trang) hoặc **`src/styles/pages/`** (chỉ một trang cụ thể).
+- Trong file SCSS và trong JSX (`className`), **tên class dùng chữ thường + dấu gạch ngang** (kebab-case), ví dụ `hero-banner`, `hero-banner-title`.
+- **Import** style vào barrel tương ứng:
+  - `src/styles/components/_index.scss` — `@use "./ten-file.scss";`
+  - `src/styles/pages/_index.scss` — `@use "./ten-file.scss";`
+- `global.scss` đã `@use` `components` và `pages`; không import SCSS global trực tiếp từ file component `.tsx`.

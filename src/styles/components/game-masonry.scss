@@ -1,0 +1,200 @@
+.game-masonry-card-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.game-masonry-card {
+  position: relative;
+  display: block;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #1e293b;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to top,
+      rgba(15, 23, 42, 0.88) 0%,
+      rgba(15, 23, 42, 0.35) 45%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .game-masonry-card-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.game-masonry-card-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 14px 12px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+  pointer-events: none;
+}
+
+.game-masonry-card-media {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  &--video-active .game-masonry-thumb--loaded {
+    opacity: 0;
+  }
+}
+
+.game-masonry-preview-video {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  background: #0f172a;
+
+  &--active {
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .game-masonry-preview-video {
+    display: none;
+  }
+}
+
+.game-masonry-thumb-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #1e293b;
+}
+
+@keyframes game-masonry-thumb-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.game-masonry-thumb-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #334155 0%,
+    #475569 45%,
+    #64748b 50%,
+    #475569 55%,
+    #334155 100%
+  );
+  background-size: 200% 100%;
+  animation: game-masonry-thumb-shimmer 1.4s ease-in-out infinite;
+}
+
+.game-masonry-thumb {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background-color: #334155;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  &--loaded {
+    opacity: 1;
+  }
+}
+
+.game-masonry-thumb--placeholder {
+  width: 100%;
+  min-height: 160px;
+  background: linear-gradient(145deg, #475569 0%, #334155 100%);
+}
+
+.game-masonry-meta {
+  padding: 10px 12px 12px;
+}
+
+.game-masonry-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0;
+  line-height: 1.35;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.game-masonry-menu {
+  position: absolute;
+  bottom: 52px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  color: #f1f5f9;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background 0.2s;
+
+  &:hover {
+    background: rgba(15, 23, 42, 0.9);
+  }
+}
+
+.game-masonry-status {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+}

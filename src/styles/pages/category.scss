@@ -1,0 +1,140 @@
+.home.category-page {
+  .category-breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #94a3b8;
+
+    a {
+      color: #93c5fd;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    span:last-child {
+      color: #e2e8f0;
+    }
+  }
+
+  .category-hero {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 20px 22px;
+    border-radius: 16px;
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.95) 0%,
+      rgba(15, 23, 42, 0.98) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .category-hero-emoji {
+    flex-shrink: 0;
+    font-size: 2.75rem;
+    line-height: 1;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+  }
+
+  .category-hero-content {
+    min-width: 0;
+  }
+
+  .category-hero-title {
+    margin: 0 0 8px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #f8fafc;
+    line-height: 1.2;
+  }
+
+  .category-hero-desc {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #94a3b8;
+    max-width: 720px;
+  }
+
+  @keyframes category-hero-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  %category-hero-shimmer {
+    color: transparent;
+    user-select: none;
+    background: linear-gradient(
+      90deg,
+      rgba(51, 65, 85, 0.55) 0%,
+      rgba(71, 85, 105, 0.75) 45%,
+      rgba(100, 116, 139, 0.85) 50%,
+      rgba(71, 85, 105, 0.75) 55%,
+      rgba(51, 65, 85, 0.55) 100%
+    );
+    background-size: 200% 100%;
+    animation: category-hero-shimmer 1.4s ease-in-out infinite;
+  }
+
+  .category-hero--skeleton {
+    pointer-events: none;
+
+    .category-hero-emoji {
+      @extend %category-hero-shimmer;
+      display: block;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 10px;
+      filter: none;
+    }
+
+    .category-hero-title {
+      @extend %category-hero-shimmer;
+      display: block;
+      width: 200px;
+      max-width: 100%;
+      min-height: calc(clamp(1.5rem, 3vw, 2rem) * 1.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .category-hero-desc {
+      @extend %category-hero-shimmer;
+      display: block;
+      width: 400px;
+      max-width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .category-hero {
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .category-hero-emoji {
+      font-size: 2.25rem;
+    }
+
+    .category-hero--skeleton {
+      .category-hero-emoji {
+        width: 2.25rem;
+        height: 2.25rem;
+      }
+    }
+  }
+}
