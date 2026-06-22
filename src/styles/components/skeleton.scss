@@ -1,0 +1,25 @@
+@keyframes ui-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+%ui-shimmer-block {
+  color: transparent;
+  user-select: none;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(51, 65, 85, 0.55) 0%,
+    rgba(71, 85, 105, 0.75) 45%,
+    rgba(100, 116, 139, 0.85) 50%,
+    rgba(71, 85, 105, 0.75) 55%,
+    rgba(51, 65, 85, 0.55) 100%
+  );
+  background-size: 200% 100%;
+  animation: ui-shimmer 1.4s ease-in-out infinite;
+}

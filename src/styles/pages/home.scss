@@ -1,3 +1,5 @@
+@use "../components/skeleton.scss" as *;
+
 .home {
   .home-scroll {
     height: 100vh;
@@ -243,6 +245,14 @@
     pointer-events: none;
   }
 
+  .category-card-skeleton {
+    @extend %ui-shimmer-block;
+    flex-shrink: 0;
+    width: 230px;
+    height: 120px;
+    border-radius: 12px;
+  }
+
   @media (min-width: 900px) {
     .category-cards {
       gap: 12px;
@@ -436,6 +446,90 @@
 
   .hero-banner-thumb-placeholder {
     background: linear-gradient(145deg, #475569 0%, #334155 100%);
+  }
+
+  .hero-banner--skeleton {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .hero-banner-bg--skeleton {
+    @extend %ui-shimmer-block;
+    background-color: #1e293b;
+  }
+
+  .hero-banner-title--skeleton {
+    @extend %ui-shimmer-block;
+    display: block;
+    width: min(280px, 72%);
+    height: calc(32px * 1.2);
+    margin: 0 0 4px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .hero-banner-subtitle--skeleton {
+    @extend %ui-shimmer-block;
+    display: block;
+    width: 120px;
+    height: 14px;
+    margin: 0 0 12px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .hero-banner-meta-tag--skeleton {
+    @extend %ui-shimmer-block;
+    display: inline-block;
+    width: 72px;
+    height: 26px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    overflow: hidden;
+
+    &:last-child {
+      width: 96px;
+    }
+  }
+
+  .hero-banner-tag--skeleton {
+    @extend %ui-shimmer-block;
+    display: inline-block;
+    width: 72px;
+    height: 26px;
+    padding: 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .hero-banner-desc--skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .hero-banner-desc-line {
+    @extend %ui-shimmer-block;
+    display: block;
+    width: 100%;
+    height: calc(14px * 1.5);
+    border-radius: 6px;
+    overflow: hidden;
+
+    &--short {
+      width: 68%;
+    }
+  }
+
+  .hero-banner-thumb--skeleton {
+    @extend %ui-shimmer-block;
+    width: 104px;
+    height: 58px;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .featured {
@@ -764,6 +858,12 @@
       height: 120px;
       border-radius: 10px;
     }
+
+    .category-card-skeleton {
+      width: 230px;
+      height: 120px;
+      border-radius: 10px;
+    }
     .category-card-icon {
       font-size: 2.15rem;
       top: 0;
@@ -786,10 +886,22 @@
     .hero-banner-title {
       font-size: 24px;
     }
+
+    .hero-banner-title--skeleton {
+      width: min(220px, 78%);
+      height: calc(24px * 1.2);
+    }
+
     .hero-banner-thumbs {
       gap: 8px;
     }
+
     .hero-banner-thumb {
+      width: 76px;
+      height: 43px;
+    }
+
+    .hero-banner-thumb--skeleton {
       width: 76px;
       height: 43px;
     }

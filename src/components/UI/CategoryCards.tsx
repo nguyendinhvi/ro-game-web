@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import CategoryCardsSkeleton from "./CategoryCardsSkeleton";
 import { IconChevronLeft, IconChevronRight } from "@/components/core/Icon";
 import { If, List } from "@/components/logic";
 import type { ICategory } from "@/interfaces";
@@ -86,9 +87,13 @@ export default function CategoryCards({
     <div className="category-cards-section">
       <div className="category-cards-row">
         <div ref={scrollRef} className="category-cards-wrap">
-          <div className="category-cards" role="list">
+          <div
+            className="category-cards"
+            role="list"
+            aria-busy={loading || undefined}
+          >
             <If condition={loading}>
-              <p className="game-masonry-status">Đang tải danh mục...</p>
+              <CategoryCardsSkeleton />
             </If>
             <If condition={!loading && categories.length > 0}>
               <List

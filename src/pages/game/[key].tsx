@@ -6,7 +6,7 @@ import AdBanner from "@/components/AdBanner";
 import TopNav from "@/components/UI/TopNav";
 import API from "@/api";
 import { useFetch } from "@/hooks";
-import { GamePlayerIframe } from "@/components/module";
+import { GamePlayerIframe, GamePlayerSkeleton } from "@/components/module";
 
 function getRelatedMasonryColumns(width: number): number {
   if (width < 400) return 2;
@@ -88,9 +88,7 @@ export default function GamePage() {
           <div className="body">
             <div className="body-row">
               <main className="main">
-                {status === "loading" && (
-                  <p className="game-fetch-status">Đang tải game...</p>
-                )}
+                {status === "loading" && <GamePlayerSkeleton />}
                 {status === "error" && (
                   <p className="game-fetch-status game-fetch-status--error">
                     Không tìm thấy game: {String(error)}

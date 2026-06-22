@@ -1,5 +1,5 @@
 import API from "@/api";
-import { SEO, CategoryCards, HeroBanner, TopNav, HomeGameMasonryList, If, SwitchRender } from "@/components";
+import { SEO, CategoryCards, HeroBanner, HeroBannerSkeleton, TopNav, HomeGameMasonryList, If, SwitchRender } from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { useFetch, useInfiniteScroll } from "@/hooks";
 import type { IGame } from "@/interfaces";
@@ -92,6 +92,10 @@ export default function Home() {
               categories={categories}
               loading={categoryStatus === "loading"}
             />
+
+            <If condition={featuredStatus === "loading"}>
+              <HeroBannerSkeleton />
+            </If>
 
             <If
               condition={

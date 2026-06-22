@@ -7,3 +7,5 @@ export { default as GameMasonryCard } from "./GameMasonryCard";
 export { default as HomeGameMasonryList } from "./HomeGameMasonryList";
 export { default as CategoryCards } from "./CategoryCards";
 export { default as CategoryHeroSkeleton } from "./CategoryHeroSkeleton";
+export { default as CategoryCardsSkeleton } from "./CategoryCardsSkeleton";
+export { default as HeroBannerSkeleton } from "./HeroBannerSkeleton";
