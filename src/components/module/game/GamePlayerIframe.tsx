@@ -14,6 +14,9 @@ import {
 import { Or } from "@/components/logic";
 import { getGameUrl } from "@/data/game";
 import type { IGame } from "@/interfaces";
+import { mergeClass } from "@/utils";
+
+const MOBILE_GAME_MAX_WIDTH = 600;
 
 interface IProps {
   game: IGame;
@@ -31,21 +34,27 @@ export default function GamePlayerIframe({ game }: IProps) {
   const [iframeLoaded, setIframeLoaded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [isMobileView, setIsMobileView] = useState(false);
 
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { user } = useAuth();
   const { startSession } = useGamePlaySession(game.id, !!user);
-  const {
-    isLiked,
-    likesLabel,
-    toggling,
-    toggleLike,
-  } = useGameLike(game.id, game.stats?.likes ?? 0, !!user);
+  const { isLiked, likesLabel, toggling, toggleLike } = useGameLike(
+    game.id,
+    game.stats?.likes ?? 0,
+    !!user,
+  );
 
   const toggleFullscreen = useCallback(() => {
     const el = gameContainerRef.current;
     if (!el) return;
+
+    if (isMobileView) {
+      setIsFullscreen((prev) => !prev);
+      return;
+    }
+
     if (!document.fullscreenElement) {
       el.requestFullscreen?.()
         .then(() => setIsFullscreen(true))
@@ -56,7 +65,13 @@ export default function GamePlayerIframe({ game }: IProps) {
         .then(() => setIsFullscreen(false))
         .catch(() => {});
     }
+  }, [isMobileView]);
+
+  const exitMobileFullscreen = useCallback(() => {
+    setIsFullscreen(false);
   }, []);
+
+  const isMobileFullscreen = isMobileView && isFullscreen;
 
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => {
@@ -83,10 +98,60 @@ export default function GamePlayerIframe({ game }: IProps) {
   console.log("🚀 ~ status:", status);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia(
+      `(max-width: ${MOBILE_GAME_MAX_WIDTH}px)`,
+    );
+    const updateViewport = () => setIsMobileView(mediaQuery.matches);
+
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
+
+  useEffect(() => {
+    if (isMobileFullscreen) {
+      document.body.classList.add("game-mobile-fullscreen-open");
+    } else {
+      document.body.classList.remove("game-mobile-fullscreen-open");
+    }
+
+    return () => {
+      document.body.classList.remove("game-mobile-fullscreen-open");
+    };
+  }, [isMobileFullscreen]);
+
+  useEffect(() => {
+    if (isMobileView) {
+      return;
+    }
+
     const handler = () => setIsFullscreen(!!document.fullscreenElement);
     document.addEventListener("fullscreenchange", handler);
     return () => document.removeEventListener("fullscreenchange", handler);
-  }, []);
+  }, [isMobileView]);
+
+  useEffect(() => {
+    if (!isMobileFullscreen) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        exitMobileFullscreen();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [exitMobileFullscreen, isMobileFullscreen]);
+
+  useEffect(() => {
+    if (isMobileView) {
+      return;
+    }
+
+    setIsFullscreen(false);
+  }, [isMobileView]);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
@@ -125,8 +190,18 @@ export default function GamePlayerIframe({ game }: IProps) {
   }, [showPreGameBanner, iframeLoaded]);
 
   return (
-    <div className="game-container" ref={gameContainerRef}>
-      <div className="iframe-wrap">
+    <div
+      className={mergeClass(
+        "game-container",
+        isMobileFullscreen && "game-container--mobile-fullscreen",
+      )}
+      ref={gameContainerRef}
+    >
+      <div
+        className={`iframe-wrap${
+          showPreGameBanner ? " iframe-wrap--pre-game" : ""
+        }`}
+      >
         <iframe
           ref={iframeRef}
           src={gameUrl}
@@ -138,7 +213,7 @@ export default function GamePlayerIframe({ game }: IProps) {
         />
         {showPreGameBanner && (
           <div className="game-play-banner">
-            <div className="game-play-banner-head">
+            <div className="game-play-banner-head game-play-banner-head--desktop">
               {thumbUrl ? (
                 <img
                   className="game-play-banner-thumb game-play-banner-thumb--compact"
@@ -181,19 +256,6 @@ export default function GamePlayerIframe({ game }: IProps) {
                   Tìm hiểu thêm
                 </button>
               </div>
-              {/* <div
-                className="game-ad-loading game-ad-loading--in-banner"
-                aria-live="polite"
-              >
-                {iframeLoaded ? (
-                  <span className="game-ad-check" aria-hidden />
-                ) : (
-                  <span className="game-ad-spinner" aria-hidden />
-                )}
-                <span className="game-ad-loading-text">
-                  {iframeLoaded ? "Game đã tải xong" : "Đang tải game..."}
-                </span>
-              </div> */}
               <div className="game-play-banner-actions">
                 <button
                   type="button"
@@ -202,19 +264,17 @@ export default function GamePlayerIframe({ game }: IProps) {
                 >
                   Chơi ngay
                 </button>
-                {/* <button
-                  type="button"
-                  className="game-play-btn game-play-btn--secondary"
-                  onClick={handlePlayWithFriends}
-                >
-                  Chơi với bạn bè
-                </button> */}
               </div>
             </div>
           </div>
         )}
       </div>
-      <div className="game-control-bar">
+      <div
+        className={mergeClass(
+          "game-control-bar",
+          isMobileFullscreen && "game-control-bar--mobile-fullscreen",
+        )}
+      >
         <div className="control-left">
           <div className="control-logo">
             {thumbUrl ? (
@@ -254,7 +314,7 @@ export default function GamePlayerIframe({ game }: IProps) {
           </button>
           <button
             type="button"
-            className="control-btn control-btn--icon"
+            className="control-btn control-btn--icon control-btn--aux"
             title="Điều khiển"
             aria-label="Điều khiển"
           >
@@ -262,7 +322,7 @@ export default function GamePlayerIframe({ game }: IProps) {
           </button>
           <button
             type="button"
-            className="control-btn control-btn--icon"
+            className="control-btn control-btn--icon control-btn--aux"
             title="Chế độ di động"
             aria-label="Chế độ di động"
           >
@@ -287,8 +347,8 @@ export default function GamePlayerIframe({ game }: IProps) {
             type="button"
             className="control-btn control-btn--icon"
             onClick={toggleFullscreen}
-            title={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
-            aria-label={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
+            title={isFullscreen ? "Thu nhỏ" : "Toàn màn hình"}
+            aria-label={isFullscreen ? "Thu nhỏ" : "Toàn màn hình"}
           >
             <Or
               condition={isFullscreen}

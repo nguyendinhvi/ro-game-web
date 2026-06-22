@@ -156,6 +156,68 @@
         border-radius: 0;
       }
     }
+
+    &.game-container--mobile-fullscreen {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      width: 100vw;
+      height: 100dvh;
+      max-height: 100dvh;
+      border-radius: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      box-shadow: none;
+
+      .iframe-wrap {
+        flex: 1;
+        position: relative;
+        min-height: 0;
+        height: auto;
+        border-radius: 0;
+
+        &::before {
+          display: none;
+        }
+      }
+
+      .iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+      }
+
+      .game-control-bar {
+        flex-shrink: 0;
+        border-radius: 0;
+      }
+    }
+  }
+
+  .game-control-bar--mobile-fullscreen {
+    gap: 10px;
+
+    .control-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .control-right {
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .control-btn--aux {
+      display: none;
+    }
+
+    .control-btn--like span {
+      display: none;
+    }
   }
 
   .iframe-wrap {
@@ -801,11 +863,108 @@
     .body {
       padding: 12px 12px 24px;
     }
-    .iframe-wrap::before {
-      padding-top: 62.5%;
+
+    .iframe-wrap {
+      &::before {
+        display: none;
+      }
+
+      min-height: calc(100dvh - 64px - 24px - 58px - 48px);
     }
+
+    .iframe-wrap--pre-game {
+      height: calc(100dvh - 64px - 24px - 58px - 48px);
+    }
+
+    .game-container--mobile-fullscreen {
+      .iframe-wrap,
+      .iframe-wrap--pre-game {
+        min-height: 0;
+        height: auto;
+      }
+    }
+
+    .game-play-banner {
+      flex-direction: column;
+      padding: 10px 12px;
+      overflow: hidden;
+      align-items: stretch;
+      justify-content: center;
+    }
+
+    .game-play-banner-head--desktop {
+      display: none;
+    }
+
+    .game-play-banner-inner--with-ad {
+      width: 100%;
+      max-width: none;
+      max-height: 100%;
+      flex: 1;
+      min-height: 0;
+      padding: 8px 0;
+      gap: 10px;
+      overflow: hidden;
+      justify-content: center;
+    }
+
+    .game-play-banner-ad-label {
+      flex-shrink: 0;
+      font-size: 10px;
+    }
+
+    .game-ad-card--in-banner {
+      flex-shrink: 1;
+      min-height: 0;
+      padding: 10px 12px;
+      gap: 6px 10px;
+      grid-template-columns: 44px 1fr;
+
+      .game-ad-card-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .game-ad-card-brand {
+        margin-bottom: 4px;
+        font-size: 14px;
+      }
+
+      .game-ad-card-desc {
+        margin-bottom: 0;
+        font-size: 11px;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .game-ad-card-sponsor,
+      .game-ad-card-more {
+        display: none;
+      }
+    }
+
+    .game-play-banner-actions {
+      flex-shrink: 0;
+      gap: 8px;
+    }
+
+    .game-play-btn {
+      width: 100%;
+      max-width: none;
+      padding: 13px 20px;
+      font-size: 15px;
+    }
+
     .sidebar {
       gap: 12px;
     }
   }
+}
+
+body.game-mobile-fullscreen-open {
+  overflow: hidden;
+  touch-action: none;
 }

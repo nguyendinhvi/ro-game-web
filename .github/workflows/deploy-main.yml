@@ -1,0 +1,39 @@
+name: Deploy main
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.MAIN_HOST }}
+          username: ${{ secrets.MAIN_USERNAME }}
+          password: ${{ secrets.MAIN_PASSWORD }}
+          port: 22
+          script_stop: true
+          command_timeout: 20m
+          script: |
+            set -e
+            cd /root/projects/rogame/ro-game-web
+
+            git fetch origin main
+            git reset --hard origin/main
+
+            npm install
+            npm run build
+
+            if pm2 describe ro-game-web > /dev/null 2>&1; then
+              pm2 restart ro-game-web
+            else
+              pm2 start npm --name ro-game-web -- start
+            fi
+
+            pm2 save

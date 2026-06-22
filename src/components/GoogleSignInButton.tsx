@@ -2,17 +2,31 @@ import { useEffect, useRef } from "react";
 import { useGoogleOAuth } from "@react-oauth/google";
 import { GOOGLE_CLIENT_ID } from "./GoogleOAuthProvider";
 
-interface GoogleSignInButtonProps {
+interface IProps {
   disabled?: boolean;
   onSuccess: (idToken: string) => void | Promise<void>;
   onError?: () => void;
 }
 
-export default function GoogleSignInButton({
+function GoogleSignInButtonDisabled() {
+  return (
+    <button
+      type="button"
+      className="login-social-btn"
+      disabled
+      title="Chưa cấu hình Google Client ID"
+    >
+      <span className="login-social-icon login-social-icon--google" aria-hidden />
+      Google
+    </button>
+  );
+}
+
+function GoogleSignInButtonInner({
   disabled = false,
   onSuccess,
   onError,
-}: GoogleSignInButtonProps) {
+}: IProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const onSuccessRef = useRef(onSuccess);
   const onErrorRef = useRef(onError);
@@ -57,20 +71,6 @@ export default function GoogleSignInButton({
     });
   }, [clientId, disabled, scriptLoadedSuccessfully]);
 
-  if (!GOOGLE_CLIENT_ID) {
-    return (
-      <button
-        type="button"
-        className="login-social-btn"
-        disabled
-        title="Chưa cấu hình Google Client ID"
-      >
-        <span className="login-social-icon login-social-icon--google" aria-hidden />
-        Google
-      </button>
-    );
-  }
-
   return (
     <div
       className={`login-social-btn-overlay${
@@ -88,4 +88,12 @@ export default function GoogleSignInButton({
       />
     </div>
   );
+}
+
+export default function GoogleSignInButton(props: IProps) {
+  if (!GOOGLE_CLIENT_ID) {
+    return <GoogleSignInButtonDisabled />;
+  }
+
+  return <GoogleSignInButtonInner {...props} />;
 }
