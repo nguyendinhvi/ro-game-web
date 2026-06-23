@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { Masonry, GameMasonryCard, SEO } from "@/components";
+import { Masonry, GameMasonryCard, GoogleAdSenseUnit, SEO } from "@/components";
 import AdBanner from "@/components/AdBanner";
 import TopNav from "@/components/UI/TopNav";
 import API from "@/api";
@@ -98,7 +98,10 @@ export default function GamePage() {
                   <GamePlayerIframe game={game} />
                 )}
 
-                <AdBanner variant="horizontal" className="game-main-ad" />
+                <GoogleAdSenseUnit
+                  variant="horizontal"
+                  className="game-main-ad"
+                />
 
                 {game?.description && (
                   <section className="game-description" aria-label="Mô tả game">

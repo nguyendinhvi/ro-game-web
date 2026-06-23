@@ -15,10 +15,7 @@ interface GoogleIdentityServices {
     client_id: string;
     callback: (response: GoogleCredentialResponse) => void;
   }) => void;
-  renderButton: (
-    parent: HTMLElement,
-    options: Record<string, unknown>,
-  ) => void;
+  renderButton: (parent: HTMLElement, options: Record<string, unknown>) => void;
 }
 
 interface Window {
@@ -27,4 +24,5 @@ interface Window {
       id?: GoogleIdentityServices;
     };
   };
+  adsbygoogle?: Record<string, unknown>[];
 }

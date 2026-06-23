@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/context/AuthProvider";
 import { useGameLike, useGamePlaySession } from "@/hooks";
 import {
-  IconAdPlay,
   IconFullscreen,
   IconFullscreenExit,
   IconGamepad,
@@ -11,12 +10,14 @@ import {
   IconVolume,
   IconVolumeOff,
 } from "@/components/core/Icon";
+import GoogleAdSenseUnit from "@/components/GoogleAdSenseUnit";
 import { Or } from "@/components/logic";
 import { getGameUrl } from "@/data/game";
 import type { IGame } from "@/interfaces";
 import { mergeClass } from "@/utils";
 
 const MOBILE_GAME_MAX_WIDTH = 600;
+const PRE_GAME_AD_WAIT_SECONDS = 5;
 
 interface IProps {
   game: IGame;
@@ -35,6 +36,7 @@ export default function GamePlayerIframe({ game }: IProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+  const [playCountdown, setPlayCountdown] = useState(PRE_GAME_AD_WAIT_SECONDS);
 
   const gameContainerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -72,6 +74,10 @@ export default function GamePlayerIframe({ game }: IProps) {
   }, []);
 
   const isMobileFullscreen = isMobileView && isFullscreen;
+  const canPlayNow = playCountdown <= 0;
+  const playButtonLabel = canPlayNow
+    ? "Chơi ngay"
+    : `Chơi ngay (${playCountdown}s)`;
 
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => {
@@ -181,7 +187,20 @@ export default function GamePlayerIframe({ game }: IProps) {
   useEffect(() => {
     setIframeLoaded(false);
     setShowPreGameBanner(true);
+    setPlayCountdown(PRE_GAME_AD_WAIT_SECONDS);
   }, [game.slug]);
+
+  useEffect(() => {
+    if (!showPreGameBanner || playCountdown <= 0) {
+      return;
+    }
+
+    const id = window.setTimeout(() => {
+      setPlayCountdown((prev) => Math.max(0, prev - 1));
+    }, 1000);
+
+    return () => window.clearTimeout(id);
+  }, [playCountdown, showPreGameBanner]);
 
   useEffect(() => {
     if (!showPreGameBanner || iframeLoaded) return;
@@ -234,35 +253,28 @@ export default function GamePlayerIframe({ game }: IProps) {
             <div className="game-play-banner-inner game-play-banner-inner--with-ad">
               <p className="game-play-banner-ad-label">Quảng cáo</p>
 
-              <div className="game-ad-card game-ad-card--in-banner">
-                <div className="game-ad-card-visual" aria-hidden>
-                  <IconAdPlay
-                    className="game-ad-card-icon"
-                    width={64}
-                    height={64}
-                  />
-                </div>
-                <div className="game-ad-card-copy">
-                  <p className="game-ad-card-brand">Google AdMob™</p>
-                  <p className="game-ad-card-desc">
-                    Google AdMob™ giúp kiếm doanh thu dễ dàng với quảng cáo
-                    trong game di động.
-                  </p>
-                  <p className="game-ad-card-sponsor">
-                    Được tài trợ bởi Google AdMob
-                  </p>
-                </div>
-                <button type="button" className="game-ad-card-more">
-                  Tìm hiểu thêm
-                </button>
-              </div>
+              <GoogleAdSenseUnit
+                key={game.id}
+                variant="square"
+                className="game-play-banner-adsense"
+              />
+
               <div className="game-play-banner-actions">
                 <button
                   type="button"
-                  className="game-play-btn game-play-btn--primary"
+                  className={mergeClass(
+                    "game-play-btn game-play-btn--primary",
+                    !canPlayNow && "game-play-btn--waiting",
+                  )}
                   onClick={handlePlayNow}
+                  disabled={!canPlayNow}
+                  aria-label={
+                    canPlayNow
+                      ? "Chơi ngay"
+                      : `Chơi ngay sau ${playCountdown} giây`
+                  }
                 >
-                  Chơi ngay
+                  {playButtonLabel}
                 </button>
               </div>
             </div>

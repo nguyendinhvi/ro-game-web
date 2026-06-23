@@ -347,6 +347,30 @@
     text-transform: uppercase;
   }
 
+  .game-play-banner-adsense {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(15, 23, 42, 0.35);
+    border: none;
+
+    .ad-banner-label {
+      display: none;
+    }
+
+    .google-adsense-unit__slot {
+      min-height: 100px;
+      padding: 0;
+    }
+
+    .adsbygoogle {
+      display: block;
+      width: 100%;
+    }
+  }
+
   .game-play-banner-head {
     position: absolute;
     top: 12px;
@@ -443,12 +467,12 @@
       box-shadow 0.2s,
       opacity 0.2s;
 
-    &:hover {
+    &:hover:not(:disabled) {
       transform: translateY(-1px);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
 
-    &:active {
+    &:active:not(:disabled) {
       transform: translateY(0);
     }
   }
@@ -457,9 +481,17 @@
     background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
     color: #fff;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
     }
+  }
+
+  .game-play-btn--waiting,
+  .game-play-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.72;
+    transform: none;
+    box-shadow: none;
   }
 
   .game-play-btn--secondary {
@@ -972,6 +1004,11 @@
     .game-play-banner-ad-label {
       flex-shrink: 0;
       font-size: 10px;
+    }
+
+    .game-play-banner-adsense {
+      flex-shrink: 1;
+      min-height: 90px;
     }
 
     .game-ad-card--in-banner {
