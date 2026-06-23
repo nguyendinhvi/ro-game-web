@@ -93,6 +93,21 @@ export async function buildSitemapUrls(): Promise<ISitemapUrl[]> {
       changefreq: "daily",
       priority: 1,
     },
+    {
+      loc: toAbsoluteUrl("/privacy"),
+      changefreq: "monthly",
+      priority: 0.3,
+    },
+    {
+      loc: toAbsoluteUrl("/terms"),
+      changefreq: "monthly",
+      priority: 0.3,
+    },
+    {
+      loc: toAbsoluteUrl("/contact"),
+      changefreq: "monthly",
+      priority: 0.3,
+    },
   ];
 
   for (const category of categories) {

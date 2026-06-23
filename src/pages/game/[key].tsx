@@ -2,7 +2,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { Masonry, GameMasonryCard, GoogleAdSenseUnit, SEO } from "@/components";
-import AdBanner from "@/components/AdBanner";
 import TopNav from "@/components/UI/TopNav";
 import API from "@/api";
 import { useFetch } from "@/hooks";
@@ -250,7 +249,10 @@ export default function GamePage() {
               </main>
 
               <aside className="sidebar">
-                <AdBanner variant="square" className="sidebar-ad" />
+                <GoogleAdSenseUnit
+                  variant="square"
+                  className="sidebar-ad"
+                />
 
                 <div className="related-section">
                   <h2 className="related-title">Phát tiếp theo</h2>

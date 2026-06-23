@@ -77,6 +77,7 @@ export default function GoogleAdSenseUnit({
       mergeClass(
         "google-adsense-unit",
         `google-adsense-unit--${variant}`,
+        variant === "square" && "ad-banner ad-banner--square",
         variant === "horizontal" && "ad-banner ad-banner--horizontal",
         className,
       ),

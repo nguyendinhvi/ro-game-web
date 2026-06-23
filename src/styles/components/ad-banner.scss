@@ -125,6 +125,18 @@
     }
   }
 
+  &.ad-banner--square {
+    aspect-ratio: 1;
+    min-height: 200px;
+
+    .google-adsense-unit__slot {
+      flex: 1;
+      min-height: 0;
+      padding: 28px 14px 14px;
+      box-sizing: border-box;
+    }
+  }
+
   &.ad-banner--horizontal {
     width: 100%;
     min-height: 120px;

@@ -312,10 +312,10 @@ export default function TopNav() {
                             Đăng xuất
                           </button>
                           <div className="user-menu-divider" role="separator" />
-                          <button type="button" className="user-menu-item">
+                          <Link href="/contact" className="user-menu-item">
                             <IconMail width={20} height={20} aria-hidden />
                             Hỗ trợ
-                          </button>
+                          </Link>
                         </nav>
 
                         <div className="user-menu-lang">
@@ -328,9 +328,10 @@ export default function TopNav() {
                         <div className="user-menu-footer-links">
                           <a href="#">Về chúng tôi</a>
                           <a href="#">Trang trẻ em</a>
-                          <a href="#">Điều khoản và điều kiện</a>
+                          <Link href="/terms">Điều khoản và điều kiện</Link>
                           <a href="#">Công việc</a>
-                          <a href="#">Quyền riêng tư</a>
+                          <Link href="/privacy">Quyền riêng tư</Link>
+                          <Link href="/contact">Liên hệ</Link>
                           <a href="#">Nhà phát triển trò chơi</a>
                           <Link href="/">Tất cả trò chơi</Link>
                         </div>
